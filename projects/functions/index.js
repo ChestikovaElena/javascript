@@ -43,8 +43,7 @@ function sumWithDefaults(a, b = 100) {
    returnFnResult(() => 'привет') вернет 'привет'
  */
 function returnFnResult(fn) {
-  const result = fn();
-  return result;
+  return fn();
 }
 
 /*
@@ -60,12 +59,10 @@ function returnFnResult(fn) {
    console.log(f()); // выведет 12
    console.log(f()); // выведет 13
  */
-function returnCounter(number = 0) {
-  return function () {
-    number += 1;
-    return number;
-  };
-}
+const returnCounter = (number = 0) => () => {
+  number += 1;
+  return number;
+};
 
 /*
  Задание 5 *:
@@ -77,11 +74,7 @@ function returnCounter(number = 0) {
    returnArgumentsArray(1, 2, 3) вернет [1, 2, 3]
  */
 function returnArgumentsArray() {
-  const resultArray = [];
-  for (let i = 0; i < arguments.length; i++) {
-    resultArray.push(arguments[i]);
-  }
-  return resultArray;
+  return [...arguments];
 }
 
 /*
