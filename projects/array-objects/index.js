@@ -42,10 +42,9 @@ function map(array, fn) {
    reduce([1, 2, 3], (all, current) => all + current) // 6
  */
 function reduce(array, fn, initial) {
-  let result = initial || array[0],
-    i = initial ? 0 : 1;
+  let result = initial || array[0];
 
-  for (; i < array.length; i++) {
+  for (let i = initial ? 0 : 1; i < array.length; i++) {
     result = fn(result, array[i], i, array);
   }
 
@@ -82,12 +81,15 @@ function upperProps(obj) {
 function createProxy(obj) {
   obj = new Proxy(obj, {
     set: function (target, prop, value) {
-      if (typeof value == 'number') {
+      try {
+        if (typeof value !== 'number') {
+          throw new Error('Нельзя записать нечисловое значение');
+        }
+
         target[prop] = value ** 2;
         return true;
-      } else {
-        console.log('Нельзя записать нечисловое значение');
-        return false;
+      } catch (e) {
+        console.log(e.message);
       }
     },
   });
