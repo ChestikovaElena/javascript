@@ -81,16 +81,12 @@ function upperProps(obj) {
 function createProxy(obj) {
   obj = new Proxy(obj, {
     set: function (target, prop, value) {
-      try {
-        if (typeof value !== 'number') {
-          throw new Error('Нельзя записать нечисловое значение');
-        }
-
-        target[prop] = value ** 2;
-        return true;
-      } catch (e) {
-        console.log(e.message);
+      if (typeof value !== 'number') {
+        throw new Error('Нельзя записать нечисловое значение');
       }
+
+      target[prop] = value ** 2;
+      return true;
     },
   });
   return obj;
