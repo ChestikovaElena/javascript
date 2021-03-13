@@ -78,10 +78,8 @@ function returnBadArguments(fn) {
 
   for (let i = 1; i < arguments.length; i++) {
     try {
-      if (fn(arguments[i])) {
-        throw new Error();
-      }
-    } catch (e) {
+      fn(arguments[i]);
+    } catch {
       result.push(arguments[i]);
     }
   }
@@ -113,31 +111,21 @@ function calculator(number = 0) {
 
   const object = {
     sum: function () {
-      for (let i = 0; i < arguments.length; i++) {
-        number += arguments[i];
-      }
-      return number;
+      return Array.from(arguments).reduce((a, b) => a + b, number);
     },
     dif: function () {
-      for (let i = 0; i < arguments.length; i++) {
-        number -= arguments[i];
-      }
-      return number;
+      return Array.from(arguments).reduce((a, b) => a - b, number);
     },
     div: function () {
-      for (let i = 0; i < arguments.length; i++) {
-        if (arguments[i] === 0) {
+      return Array.from(arguments).reduce((a, b) => {
+        if (a === 0 || b === 0) {
           throw new Error('division by 0');
         }
-        number /= arguments[i];
-      }
-      return number;
+        return a / b;
+      }, number);
     },
     mul: function () {
-      for (let i = 0; i < arguments.length; i++) {
-        number *= arguments[i];
-      }
-      return number;
+      return Array.from(arguments).reduce((a, b) => a * b, number);
     },
   };
   return object;
