@@ -17,7 +17,7 @@
    isAllTrue([100, 2, 3, 4, 5], n => n < 10) // вернет false
  */
 function isAllTrue(array, fn) {
-  if (!(array instanceof Array) || array.length === 0) {
+  if (!Array.isArray(array) || !array.length) {
     throw new Error('empty array');
   } else if (typeof fn !== 'function') {
     throw new Error('fn is not a function');
@@ -46,7 +46,7 @@ function isAllTrue(array, fn) {
      isSomeTrue([1, 2, 3, 4, 5], n => n > 20) // вернет false
    */
 function isSomeTrue(array, fn) {
-  if (!(array instanceof Array) || array.length === 0) {
+  if (!Array.isArray(array) || !array.length) {
     throw new Error('empty array');
   } else if (typeof fn !== 'function') {
     throw new Error('fn is not a function');
@@ -69,18 +69,18 @@ function isSomeTrue(array, fn) {
    3.3: Необходимо выбрасывать исключение в случаях:
      - fn не является функцией (с текстом "fn is not a function")
    */
-function returnBadArguments(fn) {
-  const result = [];
-
+function returnBadArguments(fn, ...args) {
   if (typeof fn !== 'function') {
     throw new Error('fn is not a function');
   }
 
-  for (let i = 1; i < arguments.length; i++) {
+  const result = [];
+
+  for (const arg of args) {
     try {
-      fn(arguments[i]);
+      fn(arg);
     } catch {
-      result.push(arguments[i]);
+      result.push(arg);
     }
   }
 
@@ -110,22 +110,22 @@ function calculator(number = 0) {
   }
 
   const object = {
-    sum: function () {
-      return Array.from(arguments).reduce((a, b) => a + b, number);
+    sum: function (...args) {
+      return args.reduce((a, b) => a + b, number);
     },
-    dif: function () {
-      return Array.from(arguments).reduce((a, b) => a - b, number);
+    dif: function (...args) {
+      return args.reduce((a, b) => a - b, number);
     },
-    div: function () {
-      return Array.from(arguments).reduce((a, b) => {
-        if (a === 0 || b === 0) {
+    div: function (...args) {
+      return args.reduce((a, b) => {
+        if (b === 0) {
           throw new Error('division by 0');
         }
         return a / b;
       }, number);
     },
-    mul: function () {
-      return Array.from(arguments).reduce((a, b) => a * b, number);
+    mul: function (...args) {
+      return args.reduce((a, b) => a * b, number);
     },
   };
   return object;
