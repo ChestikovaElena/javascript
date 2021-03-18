@@ -14,7 +14,6 @@ function createDivWithText(text) {
   const newElement = document.createElement('div');
 
   newElement.innerHTML = text;
-  document.body.appendChild(newElement);
   return newElement;
 }
 /*
@@ -47,12 +46,14 @@ function prepend(what, where) {
 
    findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span т.к. следующим соседом этих элементов является элемент с тегом P
  */
+
 function findAllPSiblings(where) {
   const result = [];
-  const childrens = where.children;
-  for (let i = 0; i < childrens.length - 1; i++) {
-    if (childrens[i].nextElementSibling.nodeName === 'P') {
-      result.push(childrens[i]);
+  const nodes = where.querySelectorAll('P');
+
+  for (const node of nodes) {
+    if (node.previousSibling.nodeType === 1) {
+      result.push(node.previousSibling);
     }
   }
   return result;
@@ -116,19 +117,18 @@ function deleteTextNodes(where) {
    После выполнения функции, дерево <span> <div> <b>привет</b> </div> <p>loftchool</p> !!!</span>
    должно быть преобразовано в <span><div><b></b></div><p></p></span>
  */
-function deleteTextNodesRecursive(where) {
-  for (let i = 0; i < where.childNodes.length; i++) {
-    const child = where.childNodes[i];
 
+function deleteTextNodesRecursive(where) {
+  const nodes = [...where.childNodes];
+
+  for (const child of nodes) {
     if (child.nodeType === 3) {
       where.removeChild(child);
-      i--;
-    } else if (child.nodeType === 1) {
+    } else if (child.hasChildNodes() > 0) {
       deleteTextNodesRecursive(child);
     }
   }
 }
-
 /*
  Задание 7 *:
 
@@ -150,29 +150,31 @@ function deleteTextNodesRecursive(where) {
    }
  */
 
-const result = {
-  tags: {},
-  classes: {},
-  texts: 0,
-};
 function collectDOMStat(root) {
-  const childrens = root.childNodes;
+  const result = {
+    tags: {},
+    classes: {},
+    texts: 0,
+  };
+  (function scan(root) {
+    const childrens = root.childNodes;
 
-  for (let i = 0; i < childrens.length; i++) {
-    if (childrens[i].nodeType === 3) {
-      result.texts += 1;
-    } else if (childrens[i].nodeType === 1) {
-      result.tags[childrens[i].tagName] = (result.tags[childrens[i].tagName] || 0) + 1;
+    for (let i = 0; i < childrens.length; i++) {
+      if (childrens[i].nodeType === 3) {
+        result.texts += 1;
+      } else if (childrens[i].nodeType === 1) {
+        result.tags[childrens[i].tagName] = (result.tags[childrens[i].tagName] || 0) + 1;
 
-      for (const classChild of childrens[i].classList) {
-        result.classes[classChild] = (result.classes[classChild] || 0) + 1;
-      }
+        for (const classChild of childrens[i].classList) {
+          result.classes[classChild] = (result.classes[classChild] || 0) + 1;
+        }
 
-      if (childrens[i].hasChildNodes()) {
-        collectDOMStat(childrens[i]);
+        if (childrens[i].hasChildNodes()) {
+          scan(childrens[i]);
+        }
       }
     }
-  }
+  })(root);
   return result;
 }
 
