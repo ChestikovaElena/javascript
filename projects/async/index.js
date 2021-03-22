@@ -100,14 +100,16 @@ loadTowns().then((towns) => {
 
     const targetValue = event.target.value;
     filterResult.innerHTML = '';
+    const fragment = document.createDocumentFragment();
+
     for (let i = 0; i < towns.length; i++) {
       if (isMatching(towns[i].name, targetValue)) {
         const div = document.createElement('div');
         div.textContent = towns[i].name;
-        filterResult.appendChild(div);
+        fragment.append(div);
       }
     }
-
+    filterResult.append(fragment);
     if (targetValue === '') {
       filterResult.innerHTML = '';
     }

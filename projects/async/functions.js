@@ -56,4 +56,10 @@ function loadAndSortTowns() {
 //  }
 // }
 
+// function loadAndSortTowns() {
+//   return fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
+//     .then((res) => res.json())
+//     .then((towns) => towns.sort((a, b) => a.name.localeCompare(b.name)));
+// }
+
 export { delayPromise, loadAndSortTowns };
